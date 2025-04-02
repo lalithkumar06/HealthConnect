@@ -1,0 +1,56 @@
+.home-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    flex-direction: column;
+}
+.img-container{
+    width: 100vw;
+    height: 15rem;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/0c/Admin_Building%2C_IIIT-A.jpg');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+.profile{
+    position: absolute;
+    top : 2rem;
+    display: flex;
+    height: 2rem;
+    left:  1rem;
+    
+    align-items: center;
+    justify-content: center;
+}
+#profile-icon{
+    width: 45px;
+    margin-right: 15px;
+    height: 45px;
+    left: 1rem;
+    background-color: rgb(215, 209, 196);
+    border-radius: 50%;
+}
+#greet{
+    font-size: 1.4rem;
+    color: white;
+
+}
+#logoutbtn{
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 8rem;
+    height: 2rem;
+    background-color: aquamarine;
+    border: 0px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s ease-in;
+}
+#logoutbtn:hover{
+    scale: 1.1;
+    color: grey;
+}

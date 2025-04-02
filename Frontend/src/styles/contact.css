@@ -1,0 +1,43 @@
+#queryform {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-left: 10%;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(237, 236, 235);
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.querycontainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px;
+}
+.querycontainer label {
+  font-size: 1.5rem;
+}
+.querycontainer input {
+  width: 20rem;
+}
+#query {
+  width: 65%;
+  height: 7rem;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+#query-btn {
+  width: 8rem;
+  border-radius: 4px;
+  height: 2rem;
+  padding: 3px;
+  background-color: rgb(130, 166, 244);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+#query-btn:hover{
+    scale: 1.05;
+    color: whitesmoke;
+}
