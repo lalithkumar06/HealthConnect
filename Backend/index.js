@@ -8,9 +8,16 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000
 require('./Models/database')
 
+//resetting slots every day 
+const setupSlotResetJob = require("./slotReset");
+setupSlotResetJob();
+
+//middleware
 app.use(bodyParser());
 app.use(cors());
 app.use('/auth', authRouter);
+
+
 //protected - routes
 app.use('/protected', protrouter)
 app.listen(PORT, ()=>{

@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Contact from './pages/Contact'
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import AvaiableMedicines from "./pages/AvaiableMedicines";
+import BookSlot from "./pages/BookSlot"
 import {jwtDecode} from "jwt-decode";
 import ProtectedRoute from "./protectedRoute";
 import ErrorPage from "./pages/ErrorPage";
@@ -71,6 +73,8 @@ const App = () => {
           <Route path="/home" element={<Home data = {data}/>} />
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/contact-us" element = {<Contact data= {data}/>}/>
+          <Route path="/available-medicines" element = {<AvaiableMedicines data={data}/>}/>
+          <Route path="/bookslot" element ={<BookSlot data = {data}/>} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>

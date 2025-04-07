@@ -1,43 +1,100 @@
-#queryform {
+.contact-page {
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin-left: 10%;
-  justify-content: center;
   align-items: center;
-  background-color: rgb(237, 236, 235);
-  margin-top: 20px;
-  margin-bottom: 10px;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
 }
-.querycontainer {
+
+.contact-page h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.contact-container {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  margin: 10px;
+  width: 80%;
+  max-width: 1000px;
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  gap: 2rem;
 }
-.querycontainer label {
+
+.query-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.query-form h3 {
   font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #2980b9;
 }
-.querycontainer input {
-  width: 20rem;
+
+.query-form label {
+  font-weight: bold;
+  margin-top: 10px;
 }
-#query {
-  width: 65%;
-  height: 7rem;
-  margin-bottom: 10px;
+
+.query-form input,
+.query-form textarea {
+  width: 100%;
   padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
+
+.query-form textarea {
+  height: 100px;
+  resize: none;
+}
+
 #query-btn {
-  width: 8rem;
-  border-radius: 4px;
-  height: 2rem;
-  padding: 3px;
-  background-color: rgb(130, 166, 244);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-top: 15px;
+  padding: 10px 15px;
+  border: none;
+  background: #2980b9;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.2s ease-out;
+  transition: background 0.3s ease;
 }
-#query-btn:hover{
-    scale: 1.05;
-    color: whitesmoke;
+
+#query-btn:hover {
+  background: #1c638f;
+}
+
+.contact-details {
+  flex: 1;
+  background: #ecf0f1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-details h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #27ae60;
+}
+
+.contact-details p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

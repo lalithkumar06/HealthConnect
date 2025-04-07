@@ -3,16 +3,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "../utils";
 import "../styles/hometop.css";
-function HomeTop({data }) {
-    const handleLogOut = async () => {
-      await localStorage.removeItem("token");
-      await localStorage.removeItem("user");
-      handleSuccess("Logout successful");
-      setTimeout(() => {
-        navigate("/login");
-      }, 300);
-      console.log(data);
-    };
+function HomeTop({ data }) {
+  const navigate = useNavigate();
+  const handleLogOut = async () => {
+    await localStorage.removeItem("token");
+    await localStorage.removeItem("user");
+    handleSuccess("Logout successful");
+    setTimeout(()=>{
+      navigate("/login");
+    }, 500)
+  };
   return (
     <div className="home-container">
       <div className="img-container">
@@ -27,7 +27,6 @@ function HomeTop({data }) {
         <button id="logoutbtn" onClick={handleLogOut}>
           Logout
         </button>
-        
       </div>
     </div>
   );

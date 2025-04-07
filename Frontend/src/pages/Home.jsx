@@ -3,30 +3,33 @@ import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "../utils";
 import api from "../api";
 import { ToastContainer } from "react-toastify";
-import { useState , useEffect} from "react";
-import '../styles/home.css';
+import { useState, useEffect } from "react";
+import "../styles/home.css";
 import Navbar from "../Components/Navbar";
 import HomeTop from "../Components/HomeTop";
 import Carousel from "../Components/Carausel";
 import Footer from "../Components/Footer";
-function Home({data}) {
-  const [visitData, setVisitData] = useState({ visits: [] }); 
+function Home({ data }) {
+  const [visitData, setVisitData] = useState({ visits: [] });
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
   useEffect(() => {
     const getData = async () => {
       try {
+        const visitResponse = await api.post("/visitHistory", {
+          user: data,
+        });
 
-          const visitResponse = await api.post("/visitHistory", {
-            user: data,
-          })
-
-          if (visitResponse.data && visitResponse.data.history) {
-            setVisitData(visitResponse.data.history);
-          } else {
-            setVisitData({ visits: [] }); 
-          }
-        
+        if (visitResponse.data && visitResponse.data.history) {
+          setVisitData(visitResponse.data.history);
+        } else {
+          setVisitData({ visits: [] });
+        }
       } catch (error) {
         console.error("Error fetching dashboard:", error);
       }
@@ -34,7 +37,6 @@ function Home({data}) {
 
     getData();
   }, []);
-
 
   return (
     <>
@@ -55,10 +57,10 @@ function Home({data}) {
           <tbody>
             {visitData.visits.map((history, index) => (
               <tr key={index}>
-                <td>{history.date?history.date : "NA"}</td>
-                <td>{history.time?history.time : "NA"}</td>
-                <td>{history.issue?history.issue:"NA"}</td>
-                <td>{history.status?history.status : "NA"}</td>
+                <td>{history.date ? history.date : "NA"}</td>
+                <td>{history.time ? history.time : "NA"}</td>
+                <td>{history.issue ? history.issue : "NA"}</td>
+                <td>{history.status ? history.status : "NA"}</td>
               </tr>
             ))}
           </tbody>
@@ -162,7 +164,6 @@ function Home({data}) {
       <ToastContainer />
     </>
   );
-  
 }
 
 export default Home;

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../utils";
 import "../styles/login.css";
+import { useLocation } from "react-router-dom";
 function Login() {
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -10,13 +11,13 @@ function Login() {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/home");
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,7 +83,9 @@ function Login() {
               <input
                 type="email"
                 name="email"
+                id="email"
                 placeholder="email"
+                autoComplete="email"
                 autoFocus
                 onChange={handleChange}
                 value={loginInfo.email}
@@ -93,6 +96,8 @@ function Login() {
               <input
                 type="password"
                 name="password"
+                id="password"
+                
                 placeholder="password"
                 onChange={handleChange}
                 value={loginInfo.password}
