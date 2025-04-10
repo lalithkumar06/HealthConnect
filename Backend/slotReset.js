@@ -1,6 +1,6 @@
 
 const cron = require("node-cron");
-const slotModel = require("../models/Slots");
+const slotModel = require("./Models/Slots");
 
 const setupSlotResetJob = () => {
   cron.schedule("0 0 * * *", async () => {

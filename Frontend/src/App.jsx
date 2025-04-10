@@ -10,6 +10,7 @@ import BookSlot from "./pages/BookSlot"
 import {jwtDecode} from "jwt-decode";
 import ProtectedRoute from "./protectedRoute";
 import ErrorPage from "./pages/ErrorPage";
+import VideoConference from "./pages/VideoConference";
 import api from "./api";
 const App = () => {
   const [token, setToken] = useState("");
@@ -75,6 +76,7 @@ const App = () => {
           <Route path="/contact-us" element = {<Contact data= {data}/>}/>
           <Route path="/available-medicines" element = {<AvaiableMedicines data={data}/>}/>
           <Route path="/bookslot" element ={<BookSlot data = {data}/>} />
+          <Route path="/video-conference" element ={<VideoConference data = {data}/>} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>

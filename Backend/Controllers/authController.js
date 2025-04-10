@@ -10,24 +10,25 @@ const signup = async (req, res) => {
         .status(400)
         .json({ message: "email already exists", success: false });
     }
-    const userModel = new UserModel({ name, email, password });
+    const type = "student";
+    const userModel = new UserModel({ name, email, password , type});
     userModel.password = await bcrypt.hash(password, 10);
     await userModel.save();
     const jwttoken = jwt.sign(
-      { name : userModel.name ,email: userModel.email },
+      { name : userModel.name ,email: userModel.email , _id : _id, type : "student"},
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
-    return res
-      .status(200)
-      .json({
-        message: " singup successful",
-        success: true,
-        jwttoken: jwttoken,
-        email: email,
-        name: name,
-      });
+    return res.status(200).json({
+      message: " singup successful",
+      success: true,
+      jwttoken: jwttoken,
+      email: email,
+      name: name,
+      _id: user._id,
+      
+    });
   } catch (err) {
     return res
       .status(400)
@@ -50,7 +51,7 @@ const login = async (req, res) => {
         .json({ message: "incorrect password ", success: false });
     }
     const jwttoken = jwt.sign(
-      {  name: user.name , email: user.email },
+      {  name: user.name , email: user.email , _id : user._id, type : "student"},
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );

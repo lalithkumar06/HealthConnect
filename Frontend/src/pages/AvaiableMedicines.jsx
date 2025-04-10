@@ -1,84 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import '../styles/availablemedicines.css'
-import HomeTop from '../Components/HomeTop'
-import Navbar from '../Components/Navbar'
-import Footer from '../Components/Footer'
-import { ToastContainer } from 'react-toastify'
-import {Bandage} from 'lucide-react'
-import { BriefcaseMedical } from 'lucide-react'
-import { Syringe } from 'lucide-react'
-import { Pill } from 'lucide-react'
-import { Microscope } from 'lucide-react'
-import { Stethoscope } from 'lucide-react'
-import api from '../api'
-import { handleError } from '../utils'
+import React, { useEffect, useState } from "react";
+import "../styles/availablemedicines.css";
+import HomeTop from "../Components/HomeTop";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
+import { ToastContainer } from "react-toastify";
+import { Bandage } from "lucide-react";
+import { BriefcaseMedical } from "lucide-react";
+import { Syringe } from "lucide-react";
+import { Pill } from "lucide-react";
+import { Microscope } from "lucide-react";
+import { Stethoscope } from "lucide-react";
+import api from "../api";
+import { handleError } from "../utils";
+import { handleSuccess } from "../utils";
 import DataTable from "react-data-table-component";
-const AvaiableMedicines = ({data}) => {
-    const [search ,setSearch] = useState('');
-    const [medicines , setMedicines] = useState(null);
-    const [meddata , setMedData] = useState(null);
-    const handleChange=(e)=>{
-      setSearch(e.target.value);
-      const newMedicines = medicines.filter((medicine)=>medicine.name.toLowerCase().includes(e.target.value.toLowerCase()));
-      setMedData(newMedicines);
-    }
-    useEffect(()=>{
-        const getMedicines = async()=>{
-            const response  = await api.get('/available-medicines' );
-            console.log(response);
-            if(!response.data.success || !response.data.medicines){
-              handleError(response.data.message);
-            }
-            if(response.data.success && response.data.medicines){
-              await setMedicines(response.data.medicines);
-              await setMedData(response.data.medicines);
-              console.log(medicines);
-            }
-
-
-        }
-
-        getMedicines();
-    }, [])
-
-    const columns = [
-      {
-        name : 'Name',
-        selector : row =>row.name,
-      },
-      {
-        name : 'Used for ',
-        selector : row =>row.use,
-      },
-      {
-        name : 'Quantity',
-        selector : row =>row.quantity,
+const AvaiableMedicines = ({ data }) => {
+  const [search, setSearch] = useState("");
+  const [medicines, setMedicines] = useState(null);
+  const [meddata, setMedData] = useState(null);
+  const [formData, setFormData] = useState({ name: "", quantity: "" });
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    const newMedicines = medicines.filter((medicine) =>
+      medicine.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setMedData(newMedicines);
+  };
+  useEffect(() => {
+    const getMedicines = async () => {
+      const response = await api.get("/available-medicines");
+      console.log(response);
+      if (!response.data.success || !response.data.medicines) {
+        handleError(response.data.message);
       }
-    ];
-    const customStyles = {
-      rows: {
-        style: {
-          "&:nth-of-type(odd)": {
-            backgroundColor: "#f9f9f9",
-          },
-          "&:nth-of-type(even)": {
-            backgroundColor: "#ffffff",
-          },
-          "&:hover": {
-            backgroundColor: "#e6f7ff",
-            transition: "background-color 0.2s ease",
-          },
-          fontSize: "14px",
-        },
-      },
-      headCells: {
-        style: {
-          backgroundColor: "#f0f0f0",
-          fontWeight: "bold",
-          fontSize: "15px",
-        },
-      },
+      if (response.data.success && response.data.medicines) {
+        await setMedicines(response.data.medicines);
+        await setMedData(response.data.medicines);
+        console.log(medicines);
+      }
     };
+
+    getMedicines();
+  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const quantity = form.quantity.value;
+    const res = await api.post("/requestmedicine", { name, quantity });
+    if (!res.data.success) {
+      handleError(res.data.message);
+    } else {
+      handleSuccess(res.data.message);
+    }
+    setFormData({name : '', quantity : ''})
+  };
+  const handleForm = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const columns = [
+    {
+      name: "Name",
+      selector: (row) => row.name,
+    },
+    {
+      name: "Used for ",
+      selector: (row) => row.use,
+    },
+    {
+      name: "Quantity",
+      selector: (row) => row.quantity,
+    },
+  ];
+  const customStyles = {
+    rows: {
+      style: {
+        "&:nth-of-type(odd)": {
+          backgroundColor: "#f9f9f9",
+        },
+        "&:nth-of-type(even)": {
+          backgroundColor: "#ffffff",
+        },
+        "&:hover": {
+          backgroundColor: "#e6f7ff",
+          transition: "background-color 0.2s ease",
+        },
+        fontSize: "14px",
+      },
+    },
+    headCells: {
+      style: {
+        backgroundColor: "#f0f0f0",
+        fontWeight: "bold",
+        fontSize: "15px",
+      },
+    },
+  };
   return (
     <>
       <HomeTop data={data} />
@@ -135,9 +155,21 @@ const AvaiableMedicines = ({data}) => {
         <h3 id="request">Request for a medicine</h3>
         <form onSubmit={(e) => handleSubmit(e)} id="requestform">
           <label htmlFor="name">Name :</label>
-          <input type="text" id="name" name="name" />
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) => handleForm(e)}
+            id="name"
+            name="name"
+          />
           <label htmlFor="quantity">Quantity :</label>
-          <input type="text" id="quantity" name="quantity" />
+          <input
+            type="number"
+            id="quantity"
+            name="quantity"
+            value={formData.quantity}
+            onChange={(e) => handleForm(e)}
+          />
           <button type="submit" id="requestbtn">
             Submit
           </button>
@@ -147,6 +179,6 @@ const AvaiableMedicines = ({data}) => {
       <ToastContainer />
     </>
   );
-}
+};
 
-export default AvaiableMedicines
+export default AvaiableMedicines;

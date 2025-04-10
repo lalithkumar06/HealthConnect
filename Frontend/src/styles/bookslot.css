@@ -1,0 +1,12 @@
+.slotsbooking{
+    width: 80vw;
+    margin-left: 10vw;
+}
+#options{
+    margin-left: 10%;
+    margin-top: 2rem;
+    width: 10rem;
+    height: 1.4rem;
+    box-shadow: 2px 0px 10px 0px grey;
+    cursor: pointer;
+}

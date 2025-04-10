@@ -129,7 +129,7 @@ const Contact = ({ data }) => {
               <strong>Email:</strong> healthcenter@iiita.ac.in
             </p>
             <p>
-              <strong>Working Hours:</strong> Mon-Fri, 9:00 AM - 5:00 PM
+              <strong>Working Hours:</strong> Mon-Fri, 10:00 AM - 5:00 PM
             </p>
           </motion.div>
         </div>
