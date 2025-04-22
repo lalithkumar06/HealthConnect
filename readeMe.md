@@ -104,5 +104,9 @@ nodemon index.js
 5. Open a Pull Request
 
 
+## Note 
+All the sensitive  info shared in the .env in the previos commits are just for developement purposes and all of them are now deleted and are altered completely.
+
+
 ---
 Made with ❤️ by Vedium Lalith Kumar Reddy 
