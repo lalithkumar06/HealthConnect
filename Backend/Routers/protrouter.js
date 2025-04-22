@@ -8,7 +8,7 @@ const slotModel = require("../Models/Slots");
 const medicineModel = require("../Models/Medicine");
 const requestModel = require("../Models/RequestMedicine");
 const UserModel = require("../Models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const {
   Types: { ObjectId },
 } = require("mongoose");

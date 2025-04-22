@@ -2,7 +2,7 @@ const UserModel = require('./Models/User')
 const mongoose = require('mongoose');
 require('dotenv').config();
 const URL = process.env.URL;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 mongoose.connect(URL, { useUnifiedTopology: true });
 const userData = [
   {
