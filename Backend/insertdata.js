@@ -1,16 +1,23 @@
-
-
 const mongoose = require("mongoose");
-const Medicine = require("./Models/Medicine");
-
-const URL =
-  process.env.URL ;
+const medicineModel = require("./Models/Medicine");
+require('dotenv').config();
+const URL = process.env.URL;
 mongoose.connect(URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-const medicines = [
+// Generate unique 4-digit codes
+function generateUniqueCodes(count) {
+  const codes = new Set();
+  while (codes.size < count) {
+    const code = Math.floor(1000 + Math.random() * 9000);
+    codes.add(code);
+  }
+  return Array.from(codes);
+}
+
+const baseMedicines = [
   { name: "Paracetamol", use: "Fever and pain relief", quantity: 30 },
   { name: "Ibuprofen", use: "Anti-inflammatory and pain relief", quantity: 25 },
   { name: "Amoxicillin", use: "Bacterial infections", quantity: 20 },
@@ -70,10 +77,16 @@ const medicines = [
   { name: "Strepsils", use: "Sore throat relief", quantity: 50 },
 ];
 
+// Assign unique 4-digit codes
+const codes = generateUniqueCodes(baseMedicines.length);
+const medicines = baseMedicines.map((med, index) => ({
+  ...med,
+  medicineCode: codes[index],
+}));
 
 async function seedMedicines() {
   try {
-    await Medicine.insertMany(medicines);
+    await medicineModel.insertMany(medicines);
     console.log("Medicines inserted successfully!");
     mongoose.disconnect();
   } catch (error) {

@@ -9,6 +9,30 @@ HealthConnect is a **MERN stack** website designed to connect students with the 
 - Virtual consultation
 -previous visits
 
+## Login Credentials
+User Credentials
+Administrator Accounts(Doctors)
+
+Dr. Ramesh Kumar: A system administrator with email ramesh.kumar@gmail.com and password 123456
+Dr. Arvind Desai: A system administrator with email arvind.desai@gmail.com and password 234567
+Dr. Manish Verma: A system administrator with email manish.verma@gmail.com and password 345678
+Dr. Suresh Iyer: A system administrator with email suresh.iyer@gmail.com and password 456789
+Dr. Anjali Verma: A system administrator with email anjali.verma@gmail.com and password 567890
+Dr. Priya Nair: A system administrator with email priya.nair@gmail.com and password 678901
+
+User Accounts(Receptionist)
+
+Amit Sharma: A standard user with email amitsharma@gmail.com and password 123456
+Sneha Patil: A standard user with email snehapatil@gmail.com and password 234567
+Rahul Mehta: A standard user with email rahulmehta@gmail.com and password 345678
+Divya Kapoor: A standard user with email divyakapoor@gmail.com and password 456789
+
+Student Accounts
+
+Lalith : A student with email lalithvedium456@gmail.com and password 123445
+
+All these are random generated test credentials
+
 
 ## 📂 Folder Structure
 ```

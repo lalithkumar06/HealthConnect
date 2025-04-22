@@ -2,7 +2,7 @@ const UserModel = require('./Models/User')
 const mongoose = require('mongoose');
 require('dotenv').config();
 const URL = process.env.URL;
-
+const bcrypt = require('bcrypt');
 mongoose.connect(URL, { useUnifiedTopology: true });
 const userData = [
   {
@@ -71,16 +71,19 @@ const attendantUsers = [
 ];
 
 
-// userData.map(async(user)=>{
-//     const newUser = new UserModel({name : user.name , email  : user.email , password : user.password , type : user.type})
-//    await  newUser.save();
-// })
+userData.map(async(user)=>{
+  const hashpass = await bcrypt.hash(user.password , 10);
+    const newUser = new UserModel({name : user.name , email  : 
+      user.email , password : hashpass , type : user.type})
+   await  newUser.save();
+})
 
 attendantUsers.map(async (user) => {
+  const hashpass = await bcrypt.hash(user.password, 10);
   const newUser = new UserModel({
     name: user.name,
     email: user.email,
-    password: user.password,
+    password: hashpass,
     type: user.type,
   });
   await newUser.save();

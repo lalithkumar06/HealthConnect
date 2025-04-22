@@ -3,7 +3,10 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("token");
-  return token ? <Outlet /> : <Navigate to="/login" />;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const type = user?.type;
+
+  return token && type === "student" ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

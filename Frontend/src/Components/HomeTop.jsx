@@ -22,7 +22,7 @@ function HomeTop({ data }) {
             id="profile-icon"
             alt="profile-icon"
           />
-          <p id="greet">Welcome {data ? data.user.name : "User"} !</p>
+          <p id="greet">Welcome {data ? data.user?.name : "User"} !</p>
         </div>
         <button id="logoutbtn" onClick={handleLogOut}>
           Logout

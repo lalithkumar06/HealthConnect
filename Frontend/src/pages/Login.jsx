@@ -14,8 +14,16 @@ function Login() {
   const location = useLocation();
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const type = user?.type;
     if (token) {
-      navigate("/home");
+      if (type === "student") {
+        navigate("/home");
+      } else if (type === "Admin") {
+        navigate("/adminHome");
+      } else if (type === "User") {
+        navigate("/updaterHome");
+      }
     }
   }, [navigate, location]);
 
@@ -38,7 +46,7 @@ function Login() {
     }
 
     try {
-      const url = "http://localhost:5028/auth/login";
+      const url = "https://healthconnect-m7l6.onrender.com/auth/login";
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,11 +60,23 @@ function Login() {
         localStorage.setItem("token", result.jwttoken);
         localStorage.setItem(
           "user",
-          JSON.stringify({ name: result.name, email: result.email })
+          JSON.stringify({
+            name: result.name,
+            email: result.email,
+            type: result.type,
+          })
         );
-
+        const type = result.type;
+        console.log("type : ", type);
         setTimeout(() => {
-          navigate("/home");
+          if (type === "student") {
+            console.log("reached student");
+            navigate("/home");
+          } else if (type === "Admin") {
+            navigate("/adminHome");
+          } else if (type === "User") {
+            navigate("/updaterHome");
+          }
         }, 1000);
       } else {
         handleError(result.message);
@@ -67,8 +87,6 @@ function Login() {
       handleError("Something went wrong!");
       setLoading(false);
     }
-      
-    
   };
 
   return (
@@ -97,7 +115,6 @@ function Login() {
                 type="password"
                 name="password"
                 id="password"
-                
                 placeholder="password"
                 onChange={handleChange}
                 value={loginInfo.password}

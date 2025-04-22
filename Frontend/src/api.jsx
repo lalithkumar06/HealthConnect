@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5028/protected", 
+  baseURL: "https://healthconnect-m7l6.onrender.com/protected",
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,7 +12,9 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log("token added");
     }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -23,7 +25,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
-      window.location.href = "/login"; 
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

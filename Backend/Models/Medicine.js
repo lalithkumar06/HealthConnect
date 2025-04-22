@@ -14,6 +14,10 @@ const medicineSchema = new Schema({
     type: String,
     required: true,
   },
+  medicineCode : {
+    type : String , 
+    required : true
+  }
 });
 
 const medicineModel = mongoose.model("medicine", medicineSchema);

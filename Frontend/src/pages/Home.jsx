@@ -13,8 +13,10 @@ function Home({ data }) {
   const [visitData, setVisitData] = useState({ visits: [] });
   const navigate = useNavigate();
   useEffect(() => {
+    console.log("reached home");
     const token = localStorage.getItem("token");
     if (!token) {
+      console.log("No token");
       navigate("/login");
     }
   }, [navigate]);

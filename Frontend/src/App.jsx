@@ -9,9 +9,15 @@ import AvaiableMedicines from "./pages/AvaiableMedicines";
 import BookSlot from "./pages/BookSlot"
 import {jwtDecode} from "jwt-decode";
 import ProtectedRoute from "./protectedRoute";
-import ErrorPage from "./pages/ErrorPage";
+import UpdaterRoute from "./UpdaterRoute";
+import UpdaterHome from "./pages/UpdaterHome";
 import VideoConference from "./pages/VideoConference";
+import AdminRoute from "./AdminRoute";
+import UpdateMedicines from "./pages/UpdateMedicines"
+import AdminHome from "./pages/AdminHome"
+import ErrorPage from "./pages/ErrorPage";
 import api from "./api";
+
 const App = () => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState({
@@ -24,7 +30,7 @@ const App = () => {
 
     const gottoken = localStorage.getItem("token");
     const userdetails = localStorage.getItem("user");
-
+    
     const isTokenValid = (token) => {
       try {
         const decoded = jwtDecode(token);
@@ -71,12 +77,26 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/home" element={<Home data = {data}/>} />
+          <Route path="/home" element={<Home data={data} />} />
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/contact-us" element = {<Contact data= {data}/>}/>
-          <Route path="/available-medicines" element = {<AvaiableMedicines data={data}/>}/>
-          <Route path="/bookslot" element ={<BookSlot data = {data}/>} />
-          <Route path="/video-conference" element ={<VideoConference data = {data}/>} />
+          <Route path="/contact-us" element={<Contact data={data} />} />
+          <Route
+            path="/available-medicines"
+            element={<AvaiableMedicines data={data} />}
+          />
+          <Route path="/bookslot" element={<BookSlot data={data} />} />
+          <Route
+            path="/video-conference"
+            element={<VideoConference data={data} />}
+          />
+        </Route>
+        <Route element={<AdminRoute />}>
+          <Route path="/adminHome" element={<AdminHome data={data} />} />
+          <Route path= "/attend-conference" element = {<VideoConference data={data} />} />
+        </Route>
+        <Route element={<UpdaterRoute />}>
+          <Route path="/updaterHome" element={<UpdaterHome data={data} />} />
+          <Route path="/updateMedicines" element={<UpdateMedicines data={data} />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>

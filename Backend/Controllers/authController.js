@@ -4,37 +4,45 @@ const jwt = require("jsonwebtoken");
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const user = await UserModel.findOne({ email });
-    if (user) {
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
       return res
         .status(400)
-        .json({ message: "email already exists", success: false });
+        .json({ message: "Email already exists", success: false });
     }
+
     const type = "student";
-    const userModel = new UserModel({ name, email, password , type});
-    userModel.password = await bcrypt.hash(password, 10);
-    await userModel.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new UserModel({
+      name,
+      email,
+      password: hashedPassword,
+      type,
+    });
+    await newUser.save();
+
     const jwttoken = jwt.sign(
-      { name : userModel.name ,email: userModel.email , _id : _id, type : "student"},
+      { name: newUser.name, email: newUser.email, _id: newUser._id, type },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
     return res.status(200).json({
-      message: " singup successful",
+      message: "Signup successful",
       success: true,
-      jwttoken: jwttoken,
-      email: email,
-      name: name,
-      _id: user._id,
-      
+      jwttoken,
+      email: newUser.email,
+      name: newUser.name,
+      type,
+      _id: newUser._id,
     });
   } catch (err) {
     return res
-      .status(400)
-      .json({ message: " internal server error", success: false });
+      .status(500)
+      .json({ message: "Internal server error", success: false });
   }
 };
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -51,7 +59,7 @@ const login = async (req, res) => {
         .json({ message: "incorrect password ", success: false });
     }
     const jwttoken = jwt.sign(
-      {  name: user.name , email: user.email , _id : user._id, type : "student"},
+      {  name: user.name , email: user.email , _id : user._id, type : user.type},
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -63,6 +71,7 @@ const login = async (req, res) => {
         jwttoken: jwttoken,
         name: user.name,
         email: email,
+        type :user.type
       });
   } catch (err) {
     return res
