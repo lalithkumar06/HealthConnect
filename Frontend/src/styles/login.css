@@ -113,3 +113,16 @@
     transform: rotate(360deg);
   }
 }
+
+@media screen and (max-width: 768px) {
+  #login-bg {
+    display: none;
+  }
+  .container{
+    background-position: center;
+  }
+  .loginForm {
+    width: 90%;
+    margin-left: 0px;
+  }
+}

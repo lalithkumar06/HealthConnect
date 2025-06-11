@@ -19,8 +19,9 @@ mongoose.connect(URL, {
 // Apply CORS globally for HTTP routes
 app.use(
   cors({
-    origin: "https://health-connectio.netlify.app", 
-    credentials: true, })
+    origin: "https://health-connectio.netlify.app/",
+    credentials: true,
+  })
 );
 
 // Body parsers for handling JSON and URL encoded data

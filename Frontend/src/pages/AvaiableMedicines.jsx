@@ -15,6 +15,7 @@ import { handleError } from "../utils";
 import { handleSuccess } from "../utils";
 import DataTable from "react-data-table-component";
 const AvaiableMedicines = ({ data }) => {
+  document.title = "HealthConnect | Available Medicines";
   const [search, setSearch] = useState("");
   const [medicines, setMedicines] = useState(null);
   const [meddata, setMedData] = useState(null);

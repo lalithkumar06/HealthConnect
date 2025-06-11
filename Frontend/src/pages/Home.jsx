@@ -10,6 +10,7 @@ import HomeTop from "../Components/HomeTop";
 import Carousel from "../Components/Carausel";
 import Footer from "../Components/Footer";
 function Home({ data }) {
+  document.title = "HealthConnect | Home";
   const [visitData, setVisitData] = useState({ visits: [] });
   const navigate = useNavigate();
   useEffect(() => {
@@ -132,7 +133,7 @@ function Home({ data }) {
           </p>
         </div>
         <div className="departments">
-          <h2>Homeoppathic doctor</h2>
+          <h2>Homeopathic doctor</h2>
           <p>
             Offers alternative medicine solutions for common ailments,
             allergies, and chronic conditions using natural remedies.

@@ -2,17 +2,26 @@ import React, { useState } from "react";
 import HomeTop from "../Components/HomeTop";
 import Navbar from "../Components/Navbar";
 import AdminNavbar from "../Components/AdminNavbar";
-import { handleError } from "../utils";
+import { handleError, handleSuccess } from "../utils";
 import Footer from "../Components/Footer";
 import api from "../api";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "../styles/Videoconference.css";
 
 function VideoConference({ data }) {
   const [meetingStarted, setMeetingStarted] = useState(false);
   const [roomInfo, setRoomInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  document.title = "HealthConnect | Video Conference";
+  // Guard rendering if data or user is not yet available
+  if (!data || !data.user) {
+    return (
+      <div className="loading-screen">
+        <div className="loader"></div>
+        <p>Loading user data...</p>
+      </div>
+    );
+  }
 
   const handleJoinMeeting = async () => {
     try {
@@ -28,10 +37,13 @@ function VideoConference({ data }) {
       });
 
       if (response.data.success) {
+        console.log("Meeting joined successfully",response.data);
         setRoomInfo(response.data);
         setMeetingStarted(true);
+        handleSuccess("Meeting started successfully");
       } else {
         handleError("Authentication failed");
+        console.log(response.data);
       }
     } catch (error) {
       console.error(error);
@@ -59,7 +71,7 @@ function VideoConference({ data }) {
               </p>
             )}
           </div>
-
+          
           <div className="video-body">
             {!meetingStarted ? (
               <button
@@ -75,9 +87,16 @@ function VideoConference({ data }) {
                   <iframe
                     src={`https://meet.jit.si/${roomInfo.roomName}`}
                     allow="camera; microphone; fullscreen; display-capture"
-                    className="video-frame"
-                    title="Video Conference"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-presentation"
+                    style={{
+                      width: "100%",
+                      height: "600px",
+                      border: "0",
+                    }}
+                    allowFullScreen
+                    title="Jitsi Meeting"
                   />
+                  <button onClick={()=>{setMeetingStarted(false); handleSuccess("Exitted Successfully")}}>Exit</button>
                 </div>
               )
             )}

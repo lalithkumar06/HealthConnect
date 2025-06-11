@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import HomeTop from "../Components/HomeTop";
-import AdminNavbar from "../Components/AdminNavbar";
+import UpdaterNavbar from "../Components/UpdaterNavbar";
 import Footer from "../Components/Footer";
 import { handleError, handleSuccess } from "../utils";
-import DataTable from "react-data-table-component";
-import axios from "axios";
 import api from "../api";
-import UpdaterNavbar from "../Components/UpdaterNavbar";
 import "../styles/updaterHome.css";
+import { ToastContainer } from "react-toastify";
 const UpdaterHome = ({ data }) => {
+  document.title = "HealthConnect | Updater Home";
   const [medicineRequest, setMedicineRequest] = useState(null);
   const [queries, setQueries] = useState(null);
   const [queryReplies, setQueryReplies] = useState({});
+  const [visitHistory, setVisitHistory] = useState({
+    email: "",
+    issue: "",
+    status: "",
+  });
+
   const handleAccept = async (id) => {
     try {
       const res = await api.post("/acceptrequest", { id });
@@ -21,10 +26,11 @@ const UpdaterHome = ({ data }) => {
         handleSuccess(res.data.message);
         window.location.reload();
       }
-    } catch (err) {
+    } catch {
       handleError("Failed to handle change");
     }
   };
+
   const handleReject = async (id) => {
     try {
       const res = await api.post("/rejectrequest", { id });
@@ -33,10 +39,11 @@ const UpdaterHome = ({ data }) => {
       } else {
         handleSuccess(res.data.message);
       }
-    } catch (err) {
+    } catch {
       handleError("Failed to handle change");
     }
   };
+
   const handleReply = async (id, replyText, email) => {
     try {
       const res = await api.post("/sendReply", { id, replyText, email });
@@ -44,53 +51,50 @@ const UpdaterHome = ({ data }) => {
         handleError(res.data.message);
       } else {
         handleSuccess("Reply Sent Successfully");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        setTimeout(() => window.location.reload(), 1000);
       }
-    } catch (err) {
+    } catch {
       handleError("Error sending Reply");
     }
     setQueryReplies((prev) => ({ ...prev, [id]: "" }));
   };
+
   useEffect(() => {
-    const getmedData = async () => {
+    const getMedicineRequests = async () => {
       try {
         const res = await api.get("/getmedicineRequest");
         if (!res.data.success) {
           handleError(res.data.message);
         } else {
-          setMedicineRequest(res.data?.requests);
+          setMedicineRequest(res.data.requests);
         }
-      } catch (err) {
-        console.log(err);
+      } catch {
         handleError("Error fetching medicine details");
       }
     };
-    const getQueryData = async () => {
+
+    const getQueries = async () => {
       try {
-        const result = await api.get("/getQueries");
-        if (!result.data.success) {
-          handleError(result.data.message);
+        const res = await api.get("/getQueries");
+        if (!res.data.success) {
+          handleError(res.data.message);
         } else {
-          setQueries(result.data.queries);
+          setQueries(res.data.queries);
         }
-      } catch (err) {
-        handleError("Unble to get Queries");
+      } catch {
+        handleError("Unable to get Queries");
       }
     };
-    getmedData();
-    getQueryData();
+
+    getMedicineRequests();
+    getQueries();
   }, []);
-  const [visitHistory, setVisitHistory] = useState({
-    email: "",
-    issue: "",
-    status: "",
-  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVisitHistory((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -99,14 +103,13 @@ const UpdaterHome = ({ data }) => {
         handleError(res.data.message);
       } else {
         handleSuccess("History Updated Successfully");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        setTimeout(() => window.location.reload(), 1000);
       }
-    } catch (err) {
+    } catch {
       handleError("Error updating history");
     }
   };
+
   return (
     <>
       <HomeTop data={data} />
@@ -115,49 +118,42 @@ const UpdaterHome = ({ data }) => {
       <div className="query-container">
         <p id="req-head">Queries</p>
         {queries && queries.length > 0 ? (
-          <>
-            {queries.map((query) => (
-              <div className="query-cont" key={query._id}>
-                <div className="query-details">
-                  <p>
-                    {" "}
-                    <strong>User Name :</strong> {query.name}
-                  </p>
-                  <p>
-                    <strong>Email : :</strong> {query.email}
-                  </p>
-                  <p>
-                    <strong>Query :</strong> {query.query}
-                  </p>
-                </div>
-                <div className="reply-cont">
-                  <input
-                    id="reply"
-                    placeholder="Reply"
-                    value={queryReplies[query._id] || ""}
-                    onChange={(e) =>
-                      setQueryReplies({
-                        ...queryReplies,
-                        [query._id]: e.target.value,
-                      })
-                    }
-                  />
-                  <button
-                    className="reply-btn"
-                    onClick={() =>
-                      handleReply(
-                        query._id,
-                        queryReplies[query._id],
-                        query.email
-                      )
-                    }
-                  >
-                    Send
-                  </button>
-                </div>
+          queries.map((query) => (
+            <div className="query-cont" key={query._id}>
+              <div className="query-details">
+                <p>
+                  <strong>User Name :</strong> {query.name}
+                </p>
+                <p>
+                  <strong>Email :</strong> {query.email}
+                </p>
+                <p>
+                  <strong>Query :</strong> {query.query}
+                </p>
               </div>
-            ))}
-          </>
+              <div className="reply-cont">
+                <input
+                  id="reply"
+                  placeholder="Reply"
+                  value={queryReplies[query._id] || ""}
+                  onChange={(e) =>
+                    setQueryReplies({
+                      ...queryReplies,
+                      [query._id]: e.target.value,
+                    })
+                  }
+                />
+                <button
+                  className="reply-btn"
+                  onClick={() =>
+                    handleReply(query._id, queryReplies[query._id], query.email)
+                  }
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          ))
         ) : (
           <p>No Current Queries</p>
         )}
@@ -210,34 +206,39 @@ const UpdaterHome = ({ data }) => {
           <input
             type="email"
             id="email"
+            name="email"
             placeholder="Enter Email"
             required
             value={visitHistory.email}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
           <label htmlFor="issue">Issue :</label>
           <input
             type="text"
             id="issue"
+            name="issue"
             placeholder="Enter Issue"
             required
             value={visitHistory.issue}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
           <label htmlFor="status">Status :</label>
           <input
             type="text"
             id="status"
+            name="status"
             placeholder="Enter Status"
             value={visitHistory.status}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
           <button id="update-hist-btn" type="submit">
             Update History
           </button>
         </form>
       </div>
+
       <Footer />
+      <ToastContainer/>
     </>
   );
 };

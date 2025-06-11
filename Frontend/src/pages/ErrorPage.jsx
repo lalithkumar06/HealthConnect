@@ -4,7 +4,7 @@ import "../styles/error.css"; // Import CSS for styling
 
 const ErrorPage = () => {
   const navigate = useNavigate();
-
+  document.title = "HealthConnect | Error Page";
   return (
     <div className="error-container">
       <div className="error-card">

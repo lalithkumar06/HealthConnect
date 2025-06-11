@@ -231,11 +231,24 @@ button {
   background-color: #2a5a9d;
   transform: translateY(1px);
 }
-
+@media (max-width: 768px) {
+  .medicine-requests {
+    width: 80%;
+  }
+  #accept-btn,
+  #reject-btn {
+    width: 70%;
+    margin-top: 10px;
+    position: relative;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+}
 @media (max-width: 600px) {
   .historyupdater {
     padding: 15px;
     max-width: 100%;
+    width: 24rem;
   }
   
   .historyupdater h2 {
@@ -246,4 +259,10 @@ button {
   .historyupdater #update-hist-btn {
     padding: 10px;
   }
+}
+@media screen and (max-widthh : 768px){
+  .historyupdater{
+    width: 24rem;
+  }
+  
 }

@@ -12,7 +12,8 @@ const bcrypt = require("bcryptjs");
 const {
   Types: { ObjectId },
 } = require("mongoose");
-const cors = require("cors");
+const Agenda = require("../agenda");
+
 
 router.get("/home", ensureAuth, (req, res) => {
   res.status(200).json({ message: "Welcome to Dashboard", user: req.user });
@@ -115,14 +116,11 @@ router.post("/bookslot", ensureAuth, async (req, res) => {
     const user = req.user;
     const now = new Date();
 
-    // Convert "10:00 AM" → 24-hour Date object
     const cleaned = slotTime.replace(/\s+/g, "");
     const match = cleaned.match(/(\d{1,2}):(\d{2})(AM|PM)/i);
 
     if (!match) {
-      return res
-        .status(400)
-        .json({ message: "Invalid slot time format", success: false });
+      return res.json({ message: "Invalid slot time format", success: false });
     }
 
     let [_, hourStr, minuteStr, period] = match;
@@ -139,18 +137,23 @@ router.post("/bookslot", ensureAuth, async (req, res) => {
     slotDateTime.setMilliseconds(0);
 
     if (now > slotDateTime) {
-      return res
-        .status(400)
-        .json({ message: "Slot time expired", success: false });
+      return res.json({ message: "Slot time expired", success: false });
     }
 
     const response = await slotModel.findOne({ doctor });
+    if (!response) {
+      return res.status(404).json({
+        message: "Doctor not found",
+        success: false,
+      });
+    }
+
     for (let slot of response.slot) {
       if (
         slot.status === "booked" &&
         slot.id?.toString() === user._id.toString()
       ) {
-        return res.status(409).json({
+        return res.json({
           message: "You already booked a slot",
           success: false,
         });
@@ -175,14 +178,28 @@ router.post("/bookslot", ensureAuth, async (req, res) => {
         .json({ message: "Slot not found", success: false });
     }
 
-    res.status(200).json({
+    const doctorEmail = await UserModel.findOne({ name: doctor });
+    const email = doctorEmail?.email;
+
+    if (email) {
+      await Agenda.start();
+      const reminderTime = new Date(slotDateTime.getTime() - 30 * 60 * 1000);
+      await Agenda.schedule(reminderTime, "send appointment email", {
+        to: email,
+        subject: "Appointment Reminder",
+        text: `This is a reminder for your appointment at ${slotDateTime.toLocaleString()}.`,
+      });
+    }
+
+    return res.status(200).json({
       message: "Slot booked successfully",
       data: result,
       success: true,
     });
   } catch (err) {
     console.error("Error booking slot:", err);
-    res.status(500).json({ message: "Internal Server Error", success: false });
+    return res
+      .json({ message: "Internal Server Error", success: false });
   }
 });
 
@@ -308,7 +325,6 @@ router.get("/getQueries", async (req, res) => {
   }
 });
 
-//setting up nodemailer
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -322,7 +338,7 @@ const sendMail = async (to, subject, text, html) => {
   try {
     const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: email,
+      to: to,
       subject: subject,
       text: text,
       html: html,
@@ -436,94 +452,190 @@ router.put("/updatemedicine", async (req, res) => {
 });
 
 function convertTo24Hour(timeStr) {
-  const [time, modifier] = timeStr.split(" ");
+  const [time, modifier] = timeStr.trim().split(" ");
   let [hours, minutes] = time.split(":");
-
-  if (modifier === "PM" && hours !== "12") {
-    hours = parseInt(hours, 10) + 12;
+  
+  // Convert to integers for proper comparison
+  hours = parseInt(hours, 10);
+  
+  if (modifier === "PM" && hours !== 12) {
+    hours = hours + 12;
   }
-  if (modifier === "AM" && hours === "12") {
-    hours = "00";
+  if (modifier === "AM" && hours === 12) {
+    hours = 0;
   }
 
-  return `${hours}:${minutes}`;
+  // Ensure proper formatting with leading zeros
+  return `${hours.toString().padStart(2, '0')}:${minutes}`;
 }
 
 function isMeetingTimeValid(slotTime) {
   const slot24 = convertTo24Hour(slotTime);
   const [slotHour, slotMin] = slot24.split(":").map(Number);
+  
   const now = new Date();
-  const current = now.getHours() * 60 + now.getMinutes();
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+  const current = currentHour * 60 + currentMin;
   const slotTotal = slotHour * 60 + slotMin;
 
-  return current >= slotTotal;
+  // Check if current time is within the meeting window (slot time to slot time + 15 minutes)
+  return current >= slotTotal && current <= slotTotal + 15;
 }
+
+// Alternative version with better error handling and logging
+function convertTo24HourSafe(timeStr) {
+  try {
+    if (!timeStr || typeof timeStr !== 'string') {
+      throw new Error('Invalid time string');
+    }
+    
+    const trimmed = timeStr.trim();
+    const parts = trimmed.split(" ");
+    
+    if (parts.length !== 2) {
+      throw new Error('Time format should be "HH:MM AM/PM"');
+    }
+    
+    const [time, modifier] = parts;
+    const timeParts = time.split(":");
+    
+    if (timeParts.length !== 2) {
+      throw new Error('Time should be in HH:MM format');
+    }
+    
+    let [hours, minutes] = timeParts;
+    
+    // Validate hours and minutes
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+    
+    if (isNaN(hours) || isNaN(minutes) || hours < 1 || hours > 12 || minutes < 0 || minutes > 59) {
+      throw new Error('Invalid hours or minutes');
+    }
+    
+    if (!['AM', 'PM'].includes(modifier.toUpperCase())) {
+      throw new Error('Modifier should be AM or PM');
+    }
+    
+    if (modifier.toUpperCase() === "PM" && hours !== 12) {
+      hours = hours + 12;
+    }
+    if (modifier.toUpperCase() === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  } catch (error) {
+    console.error('Time conversion error:', error.message);
+    return null;
+  }
+}
+
+function isMeetingTimeValidSafe(slotTime) {
+  try {
+    const slot24 = convertTo24HourSafe(slotTime);
+    if (!slot24) {
+      console.error('Failed to convert slot time:', slotTime);
+      return false;
+    }
+    
+    const [slotHour, slotMin] = slot24.split(":").map(Number);
+    
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMin = now.getMinutes();
+    const current = currentHour * 60 + currentMin;
+    const slotTotal = slotHour * 60 + slotMin;
+    
+    console.log(`Current time: ${currentHour}:${currentMin} (${current} minutes)`);
+    console.log(`Slot time: ${slotHour}:${slotMin} (${slotTotal} minutes)`);
+    console.log(`Meeting window: ${slotTotal} - ${slotTotal + 15} minutes`);
+    
+    const isValid = current >= slotTotal && current <= slotTotal + 15;
+    console.log(`Is meeting time valid: ${isValid}`);
+    
+    return isValid;
+  } catch (error) {
+    console.error('Meeting time validation error:', error);
+    return false;
+  }
+}
+
+// Updated router with better error handling
 router.post("/join-meeting", async (req, res) => {
   try {
     const { userName, uid, type } = req.body;
 
     if (!userName) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing user name" });
+      return res.json({ success: false, message: "Missing user name" });
     }
 
     let roomName = "";
     let allowStart = false;
-
+    
     if (type === "student") {
       const slot = await slotModel.findOne({ "slot.id": uid });
       if (!slot) {
-        return res
-          .status(404)
-          .json({ success: false, message: "No slot found" });
+        return res.json({ success: false, message: "No slot found" });
+      }
+      
+      const specificSlot = slot.slot.find((item) => item.id === uid);
+      if (!specificSlot) {
+        return res.json({ success: false, message: "Specific slot not found" });
       }
 
-      const { time: slotTime, meetingType } = slot.slot;
+      const { time, meetingType } = specificSlot;
       const doctor = slot.doctor;
 
       if (meetingType === "offline") {
-        return res
-          .status(200)
-          .json({ success: false, message: "This meeting is offline" });
+        return res.status(200).json({ 
+          success: false, 
+          message: "This meeting is offline" 
+        });
       }
 
-      if (!isMeetingTimeValid(slotTime)) {
-        return res
-          .status(403)
-          .json({ success: false, message: "Meeting time not started yet" });
+      // Use the safer version with better error handling
+      if (!isMeetingTimeValidSafe(time)) {
+        return res.json({ 
+          success: false, 
+          message: "Meeting time not started yet or has expired" 
+        });
       }
+
       const saltRounds = 10;
       const hash = await bcrypt.hash(doctor, saltRounds);
       const sanitizedHash = hash.replace(/\//g, "_").replace(/\./g, "-");
-      roomName = `healthconnect-room${sanitizedHash}`;
+      roomName = `healthconnect-room${doctor}`;
       allowStart = true;
+      
     } else if (type === "Admin") {
-      if (!uid || !isMeetingTimeValid(uid)) {
-        return res
-          .status(403)
-          .json({ success: false, message: "Meeting time not started yet" });
-      }
       const saltRounds = 10;
       const hash = await bcrypt.hash(userName, saltRounds);
-      const sanitizedHash = hash.replace(/\//g, "_").replace(/\./g, "-");
-      roomName = `healthconnect-room${sanitizedHash}`;
+      const sanitizedHash = hash.replace(/\//g, "_").replace(/\./g, "-").replace(/\$/g, "_");
+      roomName = `healthconnect-room${userName}`;
       allowStart = true;
+      
     } else {
-      return res.status(400).json({ success: false, message: "Invalid type" });
+      return res.json({ success: false, message: "Invalid type" });
     }
 
     if (!allowStart) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not allowed to start meeting" });
+      return res.json({ 
+        success: false, 
+        message: "Not allowed to start meeting" 
+      });
     }
 
     res.json({ success: true, roomName });
+    
   } catch (err) {
-    res
-      .status(400)
-      .json({ message: "Joining room unsuccessful", success: false });
+    console.error("Join meeting error:", err);
+    res.json({
+      message: "Joining room unsuccessful",
+      success: false,
+      error: err.message,
+    });
   }
 });
 
@@ -538,7 +650,7 @@ router.post("/updateHistory", async (req, res) => {
       });
     }
 
-    const userExists = await userModel.findOne({ email });
+    const userExists = await UserModel.findOne({ email });
     if (!userExists) {
       return res.status(404).json({
         message: "No user registered with this email",

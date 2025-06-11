@@ -10,6 +10,7 @@ import "../styles/contact.css";
 import { motion } from "framer-motion";
 
 const Contact = ({ data }) => {
+  document.title = "HealthConnect | Contact Us";  
   const [formDetails, setFormDetails] = useState({
     name: "",
     email: "",

@@ -9,6 +9,7 @@ import api from "../api";
 import DataTable from "react-data-table-component";
 
 const BookSlot = ({ data }) => {
+  document.title = "HealthConnect | Book Slot";
   const [slotData, setSlotData] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Dr. Ramesh Kumar");
 
@@ -126,7 +127,7 @@ const BookSlot = ({ data }) => {
                 }}
                 onClick={() => handleClick("online", row.time)}
               >
-                Book Online Slot
+                 Online 
               </button>
               <button
                 style={{
@@ -137,33 +138,33 @@ const BookSlot = ({ data }) => {
                 }}
                 onClick={() => handleClick("offline", row.time)}
               >
-                Book Offline Slot
+               Offline 
               </button>
             </>
           );
-        } else if (row.id === data.user?._id) {
+        } else if (row.id === data?.user?._id) {
           return (
             <>
               <p
                 style={{
-                  fontSize: "1.2rem",
+                  fontSize: "1rem",
                   paddingTop: "3px",
                   background: "aquamarine",
                   width: 110,
                   height: 30,
                   textAlign: "center",
                   alignSelf: "center",
-                  marginRight: 15,
+                  marginRight: 5,
                 }}
               >
-                {row.meetingType}
+                {`booked ${row.meetingType}`}
               </p>
               <button
                 style={{
                   backgroundColor: "red",
                   cursor: "pointer",
                   color: "white",
-                  height: 30,
+                  height: 35,
                   width: "7rem",
                 }}
                 onClick={() => handleCancel(row.time)}
@@ -180,7 +181,7 @@ const BookSlot = ({ data }) => {
                 paddingTop: "3px",
                 background: "aquamarine",
                 width: 110,
-                height: 30,
+                height: 50,
                 textAlign: "center",
                 alignSelf: "center",
                 marginRight: 15,

@@ -88,7 +88,7 @@ function Login() {
       setLoading(false);
     }
   };
-
+  document.title = "HealthConnect | Login";
   return (
     <div className="container">
       <div className="pic-container">

@@ -1,14 +1,14 @@
-#patient-history{
-    margin-left: 50%;
-    color: blue;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+#patient-history {
+  margin-left: 50%;
+  color: blue;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.visit-history{
-    position: relative;
-    margin: auto;
-    width: 80%;
-    margin-top: 20px;
-
+.visit-history {
+  position: relative;
+  margin: auto;
+  width: 80%;
+  margin-top: 20px;
 }
 .visit-display {
   width: 100%;
@@ -32,153 +32,207 @@
 }
 
 .visit-display tr:nth-child(even) {
-  background-color: #a0e6c3; 
+  background-color: #a0e6c3;
 }
 
 .visit-display tr:hover {
-  background-color: #77d9a7; 
+  background-color: #77d9a7;
   transition: 0.3s;
 }
 
-
-#facility{
-    margin-left : 50%;
-    color: blue;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+#facility {
+  margin-left: 50%;
+  color: blue;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.facilities-container{
-    background-color: aquamarine;
-    display: flex;
+.facilities-container {
+  background-color: aquamarine;
+  display: flex;
+  width: 90%;
+  position: relative;
+  margin: auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+.facilities {
+  width: 32%;
+  margin-top: 0.4rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  box-shadow: 1px 1px 1px 1px whitesmoke;
+}
+@media screen and (max-width: 768px) {
+  .facilities {
     width: 90%;
-    position: relative;
+    height: 4rem;
     margin: auto;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-}
-.facilities{
-    width: 32%;
     margin-top: 0.4rem;
-    margin-right: 0.5rem;
+    margin-right: 1.3rem;
     margin-bottom: 0.7rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid white;
-    box-shadow: 1px 1px 1px 1px whitesmoke ;
+  }
+  .departments {
+    width: 90%;
+  }
+  #facility {
+    margin-left: 35%;
+  }
+  #patient-history {
+    margin-left: 35%;
+  }
+    .visit-history {
+        width: 90%;
+    }
+    .offers{
+        width: 90%;
+    }
+    
+    .departments-container{
+        flex-direction: column;
+    }
     
 }
-.facilities img{
-    width: 45px;
-    height: 45px;
-    margin-right: 2rem;
-
-
+.facilities img {
+  width: 45px;
+  height: 45px;
+  margin-right: 2rem;
 }
-.facility-info{
-    font-size: 1.4rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    align-self: center;
-    text-align: center;
+.facility-info {
+  font-size: 1.4rem;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  align-self: center;
+  text-align: center;
 }
-.offers-container{
-    width: 80%;
-    margin-left: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.offers-container {
+  width: 80%;
+  margin-left: 10%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.offers{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    position: relative;
+.offers {
+    width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
 }
-
-.offers h3{
-    color: blue;
-    margin-top: 10px;
-    margin: 5px;
-    font-size: 1.5rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+@media 
+screen and (max-width: 768px) {
+  .offers {
+    width: 90%;
+    margin: auto;
+  }
     
+}
+.offers h3 {
+  color: blue;
+  margin-top: 10px;
+  margin: 5px;
+  font-size: 1.5rem;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 .offers ::after {
-    position: absolute;
-    content: '';
-    width: 20rem;
-    height: 2px; 
-    left: 10%;
-    background-color: aquamarine;
-    z-index: 1;
-    top: 32%;
-    margin-top: 15px;
-    box-shadow: 0px 4px 15px rgba(0, 255, 170, 0.3); 
-    border-radius: 5px; 
-    opacity: 0.8;
+  position: absolute;
+  content: "";
+  width: 20rem;
+  height: 2px;
+  left: 10%;
+  background-color: aquamarine;
+  z-index: 1;
+  top: 32%;
+  margin-top: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 255, 170, 0.3);
+  border-radius: 5px;
+  opacity: 0.8;
 }
 
-
-.offers img{
-    width: 55px;
-    height: 55px;
-    margin-bottom: 20px;
+.offers img {
+  width: 55px;
+  height: 55px;
+  margin-bottom: 20px;
 }
-.offers p{
-    margin: 0px;
-    text-align: center;
-    font-size: 1.05rem;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: 10px;
+.offers p {
+  margin: 0px;
+  text-align: center;
+  font-size: 1.05rem;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 10px;
 }
-
-.departments-container{
-    position: relative;
-    margin: auto;
-    background-color: whitesmoke;
+@media screen and (max-width: 768px) {
+  .offers p {
+    font-size: 1.2rem;
+  }
+  .offers ::after {
     width: 90%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
+    left: 4%;
+  }
 }
-.departments{
-    display: flex;
-    width: 25%;
-    flex-direction: column;
-    border: 2px solid white;
-    gap: 5px;
-    padding: 25px;
-    margin: 1.4rem; 
-    box-shadow: 2px 10px 25px 10px rgba(178, 188, 185, 0.4);
-    opacity: 0.8;
-    transition: all 0.2s ease-in;
-    border: 5px;
-}
-.departments h2{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin-left: 5px;
-    cursor: pointer;
-    position: relative;
-}
-.departments ::after{
-    position: absolute;
-    content: '';
-    width: 40%;
-    height: 2px;
-    background-color: aquamarine;
-    top: 110%;
-    left: 0%;
-    box-shadow: 2px 10px 20px 2px rgba(128, 232, 201, 0.4);
-    opacity: 0.8;
 
+
+.departments-container {
+  position: relative;
+  margin: auto;
+  background-color: whitesmoke;
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+    margin-top: 20px;
+  gap: 25px;
+  justify-content: space-around;
+  align-items: center;
+
+  padding: 5px;
 }
-.departments p{
-    font-family: Arial, Helvetica, sans-serif;
-    cursor: pointer;
+
+.departments {
+  display: flex;
+  width: 25%; 
+  flex-direction: column;
+  border: 2px solid white;
+  gap: 5px;
+  padding: 25px;
+  box-shadow: 2px 10px 25px 10px rgba(178, 188, 185, 0.4);
+  opacity: 0.8;
+  transition: all 0.2s ease-in;
+}
+
+@media screen and (max-width: 768px) {
+  .departments {
+    width: 90%; 
+    margin: 0 auto;
+  }
+}
+
+.departments h2 {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  margin-left: 5px;
+  cursor: pointer;
+  position: relative;
+}
+.departments ::after {
+  position: absolute;
+  content: "";
+  width: 40%;
+  height: 2px;
+  background-color: aquamarine;
+  top: 110%;
+  left: 0%;
+  box-shadow: 2px 10px 20px 2px rgba(128, 232, 201, 0.4);
+  opacity: 0.8;
+}
+.departments p {
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
 }

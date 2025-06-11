@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import api from "../api";
 import "../styles/adminhome.css";
 const AdminHome = ({ data }) => {
+  document.title = "HealthCOnnect | Admin Home";
   const [slotData, setSlotData] = useState([]);
   useEffect(() => {
     const getSlotData = async () => {
@@ -84,14 +85,14 @@ const AdminHome = ({ data }) => {
               </p>
             </>
           );
-        } else if (row.meetingType === "Online") {
+        } else if (row.meetingType === "online") {
           return (
             <>
               <p
                 style={{
                   fontSize: "1.2rem",
                   paddingTop: "3px",
-                  background: "aquamarine",
+                  background: "orange",
                   width: 110,
                   height: 30,
                   textAlign: "center",

@@ -13,6 +13,7 @@ import "../styles/adminhome.css";
 //1.Add medicines
 //2.Remove medicines
 //3.Update medicine quantity
+document.title = "HealthConnect | Update Medicines";
 const UpdateMedicines = ({ data }) => {
   const [addmed, setAddMed] = useState({
     name: "",
