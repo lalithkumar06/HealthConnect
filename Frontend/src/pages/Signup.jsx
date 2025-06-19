@@ -29,7 +29,7 @@ function Signup() {
     }
 
     try {
-      const url = "http://localhost:5028/auth/signup";
+      const url = "https://healthconnect-m7l6.onrender.com/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
