@@ -19,7 +19,7 @@ mongoose.connect(URL, {
 // Apply CORS globally for HTTP routes
 app.use(
   cors({
-    origin: "https://health-connectio.netlify.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );

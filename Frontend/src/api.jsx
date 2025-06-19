@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://healthconnect-m7l6.onrender.com/protected",
+  baseURL: "http://localhost:5028/protected",
   headers: {
     "Content-Type": "application/json",
   },

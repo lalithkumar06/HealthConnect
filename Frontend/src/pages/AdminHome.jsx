@@ -7,21 +7,21 @@ import DataTable from "react-data-table-component";
 import { ToastContainer } from "react-toastify";
 import api from "../api";
 import "../styles/adminhome.css";
+
 const AdminHome = ({ data }) => {
-  document.title = "HealthCOnnect | Admin Home";
+  document.title = "HealthConnect | Admin Home";
   const [slotData, setSlotData] = useState([]);
+
   useEffect(() => {
     const getSlotData = async () => {
       try {
         const doctor = data?.user.name;
         const res = await api.post("/getdoctorslots", { doctor });
-        console.log(res);
-        if (!res.data.success || !res.data.slots || !res.data.slots) {
+        if (!res.data.success || !res.data.slots) {
           handleError("No slots found");
           setSlotData([]);
         } else {
           setSlotData(res.data.slots);
-          console.log(res.data.slots);
         }
       } catch (err) {
         handleError("Error fetching slot data");
@@ -30,7 +30,7 @@ const AdminHome = ({ data }) => {
     };
 
     getSlotData();
-  }, []);
+  }, [data]);
 
   const columns = [
     {
@@ -67,75 +67,37 @@ const AdminHome = ({ data }) => {
       name: "Book a Slot",
       cell: (row) => {
         if (row.status === "unbooked") {
-          return (
-            <>
-              <p
-                style={{
-                  fontSize: "1.2rem",
-                  paddingTop: "3px",
-                  background: "aquamarine",
-                  width: 140,
-                  height: 30,
-                  textAlign: "center",
-                  alignSelf: "center",
-                  marginRight: 15,
-                }}
-              >
-                No slot Booked
-              </p>
-            </>
-          );
+          return <p className="status-label unbooked">No Slot Booked</p>;
         } else if (row.meetingType === "online") {
-          return (
-            <>
-              <p
-                style={{
-                  fontSize: "1.2rem",
-                  paddingTop: "3px",
-                  background: "orange",
-                  width: 110,
-                  height: 30,
-                  textAlign: "center",
-                  alignSelf: "center",
-                  marginRight: 15,
-                }}
-              >
-                Online Slot
-              </p>
-            </>
-          );
+          return <p className="status-label online">Online Slot</p>;
         } else {
-          return (
-            <p
-              style={{
-                fontSize: "1.2rem",
-                paddingTop: "3px",
-                background: "aquamarine",
-                width: 110,
-                height: 30,
-                textAlign: "center",
-                alignSelf: "center",
-                marginRight: 15,
-              }}
-            >
-              Offline Slot
-            </p>
-          );
+          return <p className="status-label offline">Offline Slot</p>;
         }
       },
     },
   ];
 
   const customStyles = {
+    rows: {
+      style: {
+        fontSize: "14px",
+        minHeight: "60px",
+      },
+    },
     headCells: {
       style: {
-        backgroundColor: "#f0f8ff", 
-        color: "#333",
-        fontWeight: "bold",
-        fontSize: "1.1rem",
-        padding: "12px 15px",
+        backgroundColor: "#e9f4ff",
+        color: "#1a1a1a",
+        fontWeight: 600,
+        fontSize: "15px",
         textTransform: "uppercase",
-        borderBottom: "2px solid #ddd",
+        padding: "10px 16px",
+        borderBottom: "1px solid #ccc",
+      },
+    },
+    cells: {
+      style: {
+        padding: "10px 16px",
       },
     },
   };
@@ -150,14 +112,14 @@ const AdminHome = ({ data }) => {
           columns={columns}
           data={slotData}
           pagination
-          customStyles = {customStyles}
+          customStyles={customStyles}
           highlightOnHover
           responsive
         />
       </div>
 
       <Footer />
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

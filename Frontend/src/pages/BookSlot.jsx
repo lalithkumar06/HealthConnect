@@ -118,55 +118,25 @@ const BookSlot = ({ data }) => {
           return (
             <>
               <button
-                style={{
-                  backgroundColor: "#4CAF50",
-                  color: "white",
-                  height: 30,
-                  marginRight: 10,
-                  cursor: "pointer",
-                }}
+                className="book-btn"
                 onClick={() => handleClick("online", row.time)}
               >
-                 Online 
+                Online
               </button>
               <button
-                style={{
-                  backgroundColor: "#4CAF50",
-                  cursor: "pointer",
-                  color: "white",
-                  height: 30,
-                }}
+                className="book-btn"
                 onClick={() => handleClick("offline", row.time)}
               >
-               Offline 
+                Offline
               </button>
             </>
           );
         } else if (row.id === data?.user?._id) {
           return (
             <>
-              <p
-                style={{
-                  fontSize: "1rem",
-                  paddingTop: "3px",
-                  background: "aquamarine",
-                  width: 110,
-                  height: 30,
-                  textAlign: "center",
-                  alignSelf: "center",
-                  marginRight: 5,
-                }}
-              >
-                {`booked ${row.meetingType}`}
-              </p>
+              <p className="booked-status">{`booked ${row.meetingType}`}</p>
               <button
-                style={{
-                  backgroundColor: "red",
-                  cursor: "pointer",
-                  color: "white",
-                  height: 35,
-                  width: "7rem",
-                }}
+                className="cancel-btn"
                 onClick={() => handleCancel(row.time)}
               >
                 Cancel Slot
@@ -174,26 +144,33 @@ const BookSlot = ({ data }) => {
             </>
           );
         } else {
-          return (
-            <p
-              style={{
-                fontSize: "1.2rem",
-                paddingTop: "3px",
-                background: "aquamarine",
-                width: 110,
-                height: 50,
-                textAlign: "center",
-                alignSelf: "center",
-                marginRight: 15,
-              }}
-            >
-              Booked
-            </p>
-          );
+          return <p className="booked-other">Booked</p>;
         }
       },
     },
   ];
+
+  const customStyles = {
+    rows: {
+      style: {
+        fontSize: "14px",
+        minHeight: "60px",
+      },
+    },
+    headCells: {
+      style: {
+        backgroundColor: "#f5f5f5",
+        fontWeight: "bold",
+        fontSize: "16px",
+        color: "#444",
+      },
+    },
+    cells: {
+      style: {
+        padding: "10px",
+      },
+    },
+  };
 
   return (
     <>
@@ -216,6 +193,7 @@ const BookSlot = ({ data }) => {
           pagination
           highlightOnHover
           responsive
+          customStyles={customStyles}
         />
       </div>
 
