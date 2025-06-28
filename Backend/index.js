@@ -7,7 +7,7 @@ const protrouter = require("./Routers/protrouter");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 require("./Models/database");
-
+const setupSlotResetJob = require('./slotReset');
 const app = express();
 
 // MongoDB connection
